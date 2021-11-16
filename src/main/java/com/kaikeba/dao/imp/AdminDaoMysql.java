@@ -12,7 +12,7 @@ import java.util.Date;
 public class AdminDaoMysql implements BaseAdminDao {
     // 可以直接传入当前时间
     // private static final String SQL_UPDATE_LOGIN_TIME = "UPDATE EADMIN SET LOGINTIME=NOW(), LOGINGIP=? WHERE USERNAME=?";
-    private static final String SQL_UPDATE_LOGIN_TIME = "UPDATE EADMIN SET LOGINTIME=?, LOGINGIP=? WHERE USERNAME=?";
+    private static final String SQL_UPDATE_LOGIN_TIME = "UPDATE EADMIN SET LOGINTIME=?, LOGINIP=? WHERE USERNAME=?";
     private static final String SQL_LOGIN = "SELECT ID FROM EADMIN WHERE USERNAME=? AND PASSWORD=?";
 
     /**
