@@ -46,12 +46,14 @@ public class DruidUtil {
             throwables.printStackTrace();
         }
         try {
-            state.close();
+            if (state != null)
+                state.close();
         } catch (Exception throwables) {
             throwables.printStackTrace();
         }
         try {
-            conn.close();
+            if (conn != null)
+                conn.close();
         } catch (Exception throwables) {
             throwables.printStackTrace();
         }

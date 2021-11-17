@@ -1,6 +1,7 @@
 package com.kaikeba.dao;
 
 import com.kaikeba.bean.Express;
+import com.kaikeba.exception.DuplicateCodeException;
 
 import java.util.List;
 import java.util.Map;
@@ -54,7 +55,7 @@ public interface BaseExpressDao {
      * @param e         要录入的快递对象
      * @return          录入的结果，true成功，false失败
      */
-    boolean insert(Express e);
+    boolean insert(Express e) throws DuplicateCodeException;
 
     /**
      * 快递的修改
