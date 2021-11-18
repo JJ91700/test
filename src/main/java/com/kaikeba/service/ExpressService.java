@@ -5,6 +5,7 @@ import com.kaikeba.dao.BaseExpressDao;
 import com.kaikeba.dao.imp.ExpressDaoMysql;
 import com.kaikeba.exception.DuplicateCodeException;
 import com.kaikeba.util.RandomUtil;
+import com.kaikeba.util.SMSUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -83,7 +84,14 @@ public class ExpressService {
         e.setCode(RandomUtil.getCode() + "");
         try {
             // 插入成功不会抛出异常
-            return dao.insert(e);
+            boolean insert = dao.insert(e);
+            if (insert) {
+                // 录入成功
+                boolean send = SMSUtil.send(e.getUserPhone(), e.getCode());
+                return send;
+            } else {
+                return false;
+            }
         } catch (DuplicateCodeException duplicateCodeException) {
             //duplicateCodeException.printStackTrace();
             // 抛出异常，递归再插入一次
