@@ -36,9 +36,9 @@ public class ExpressDaoMysql implements BaseExpressDao {
             +"(number, username, userphone, company, code, intime, status, sysphone) "
             +"VALUES(?,?,?,?,?,NOW(), 0, ?)";
     // 快递修改
-    public static final String SQL_UPDATE = "UPDATE express SET number=?, username=?, company=? WHERE id=?";
+    public static final String SQL_UPDATE = "UPDATE express SET number=?, username=?, company=?, status=? WHERE id=?";
     // 取件（快递状态码改变）
-    public static final String SQL_UPDATE_STATUS = "UPDATE express SET status=1 WHERE code=?";
+    public static final String SQL_UPDATE_STATUS = "UPDATE express SET status=1, code=NULL, outtime=NOW() WHERE code=?";
     // 删除（）
     public static final String SQL_DELETE = "DELETE FROM express WHERE id=?";
 
@@ -65,7 +65,7 @@ public class ExpressDaoMysql implements BaseExpressDao {
             resultSet = state.executeQuery();
 
             // 5. 获取执行的结果
-            if (resultSet.next()) {
+            while (resultSet.next()) {
                 int data1_size = resultSet.getInt("data1_size");
                 int data1_day = resultSet.getInt("data1_day");
                 int data2_size = resultSet.getInt("data2_size");
@@ -75,8 +75,8 @@ public class ExpressDaoMysql implements BaseExpressDao {
                 data1.put("data1_size", data1_size);
                 data1.put("data1_day", data1_day);
                 Map data2 = new HashMap();
-                data1.put("data2_size", data2_size);
-                data1.put("data2_day", data2_day);
+                data2.put("data2_size", data2_size);
+                data2.put("data2_day", data2_day);
 
                 data.add(data1);
                 data.add(data2);
@@ -411,14 +411,20 @@ public class ExpressDaoMysql implements BaseExpressDao {
         PreparedStatement state = null;
         ResultSet resultSet = null;
         try {
-            state = conn.prepareStatement(SQL_CONSOLE);
+            state = conn.prepareStatement(SQL_UPDATE);
 
             // 3. 填充参数（可选）
+            //UPDATE express SET number=?, username=?, company=?, status=? WHERE id=?
+            state.setString(1, newExpress.getNumber());
+            state.setString(2, newExpress.getUsername());
+            state.setString(3, newExpress.getCompany());
+            state.setInt(4, newExpress.getStatus());
+            state.setInt(5, id);
 
             // 4. 执行SQL语句
-            resultSet = state.executeQuery();
-
+            int update = state.executeUpdate();
             // 5. 获取执行的结果
+            return update > 0 ? true : false;
 
             // 6. 资源的释放
         } catch (SQLException throwables) {
@@ -432,11 +438,11 @@ public class ExpressDaoMysql implements BaseExpressDao {
     /**
      * 更改快递的状态为1，表示取件完成
      *
-     * @param number 要修改的快递id
+     * @param code 要修改的快递id
      * @return 修改的结果，true成功，false失败
      */
     @Override
-    public boolean updateStatus(String number) {
+    public boolean updateStatus(String code) {
         // 1. 获取数据库的连接
         Connection conn = DruidUtil.getConnection();
 
@@ -444,15 +450,17 @@ public class ExpressDaoMysql implements BaseExpressDao {
         PreparedStatement state = null;
         ResultSet resultSet = null;
         try {
-            state = conn.prepareStatement(SQL_CONSOLE);
+            state = conn.prepareStatement(SQL_UPDATE_STATUS);
 
             // 3. 填充参数（可选）
+            // UPDATE express SET status=1 WHERE code=?
+            state.setString(1, code);
 
             // 4. 执行SQL语句
-            resultSet = state.executeQuery();
+            int update = state.executeUpdate();
 
             // 5. 获取执行的结果
-
+            return update > 0 ? true : false;
             // 6. 资源的释放
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -477,14 +485,17 @@ public class ExpressDaoMysql implements BaseExpressDao {
         PreparedStatement state = null;
         ResultSet resultSet = null;
         try {
-            state = conn.prepareStatement(SQL_CONSOLE);
+            state = conn.prepareStatement(SQL_DELETE);
 
             // 3. 填充参数（可选）
+            // DELETE FROM express WHERE id=?
+            state.setInt(1, id);
 
             // 4. 执行SQL语句
-            resultSet = state.executeQuery();
+            int update = state.executeUpdate();
 
             // 5. 获取执行的结果
+            return update > 0 ? true : false;
 
             // 6. 资源的释放
         } catch (SQLException throwables) {

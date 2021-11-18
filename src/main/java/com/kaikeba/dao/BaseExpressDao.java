@@ -67,10 +67,10 @@ public interface BaseExpressDao {
 
     /**
      * 更改快递的状态为1，表示取件完成
-     * @param number        要修改的快递id
+     * @param code        要修改的快递id
      * @return              修改的结果，true成功，false失败
      */
-    boolean updateStatus(String number);
+    boolean updateStatus(String code);
 
     /**
      * 根据id，删除单个快递信息
