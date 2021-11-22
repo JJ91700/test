@@ -21,11 +21,11 @@
 					striped:true,//是否显示行的间隔
 					pageNumber:1,//初始化加载第几页
 					pagination:true,//是否分页
-					sidePagination:'server',
-					pageSize:5,
-					pageList:[5,10,20],
-					showRefresh:true,
-					queryParams:function(params){
+					sidePagination:'server',//服务器端做分页
+					pageSize:5,//每一页的数据量
+					pageList:[5,10,20],//显示数据量
+					showRefresh:true,//显示刷新按钮
+					queryParams:function(params){//params是从本页面获取的数据，封装成temp对象并提交给请求作为参数
 						var temp = {
 							offset:params.offset,
 							pageNumber:params.limit
@@ -36,7 +36,7 @@
 						{
 							title:"编号",
 							field:"id",
-							sortable:false
+							sortable:false//排序允许操作，由于未知原因，排序总会切回到第一页就行，暂时先set false禁止排序
 						},
 						{
 							title:"单号",

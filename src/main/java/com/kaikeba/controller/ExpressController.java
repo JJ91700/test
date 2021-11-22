@@ -1,14 +1,17 @@
 package com.kaikeba.controller;
 
+import com.kaikeba.bean.BootstrapTableExpress;
 import com.kaikeba.bean.Express;
 import com.kaikeba.bean.Message;
 import com.kaikeba.bean.ResultData;
 import com.kaikeba.mvc.ResponseBody;
 import com.kaikeba.service.ExpressService;
+import com.kaikeba.util.DateFormatUtil;
 import com.kaikeba.util.JSONUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -41,12 +44,22 @@ public class ExpressController {
 
         // 3. 进行分页查询
         List<Express> list = ExpressService.findAll(true, offset, pageNumber);
+        List<BootstrapTableExpress> listShow = new ArrayList<>();
+        for (Express e : list) {
+            String code = e.getCode() == null ? "已取件" : e.getCode();
+            String inTime = DateFormatUtil.format(e.getInTime());
+            String outTime = e.getOutTime() == null ? "未出库" : DateFormatUtil.format(e.getOutTime());
+            String status = e.getStatus() == 0 ? "待取件" : "已取件";
+            BootstrapTableExpress eShow = new BootstrapTableExpress(e.getId(), e.getNumber(), e.getUsername(), e.getUserPhone(), e.getCompany(), code, inTime, outTime, status, e.getSysPhone());
+            listShow.add(eShow);
+        }
 
         // 4. 将集合封装为 bootstrap-table识别的格式
-        ResultData<Express> data = new ResultData<>();
+        //ResultData<Express> data = new ResultData<>();
+        ResultData<BootstrapTableExpress> data = new ResultData<>();
         List<Map<String, Integer>> console = ExpressService.console();
         Integer total = console.get(0).get("data1_size");
-        data.setRows(list);
+        data.setRows(listShow);
         data.setTotal(total);
 
         String json = JSONUtil.toJSON(data);

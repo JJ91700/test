@@ -92,6 +92,25 @@ public class ExpressDaoMysqlTest {
     }
 
     @Test
+    public void insert2() {
+        // String number, String username, String userPhone, String company, String code, String sysPhone
+        boolean insert = false;
+        try {
+            for (int i = 0; i < 10; i++) {
+                Express e = new Express("12311" + i, "李伟杰", "13660200576", "申通快递", 666000 + i + "","18888888888");
+                insert = dao.insert(e);
+                if (insert != true) {
+                    System.out.println("e = " + e);
+                    break;
+                }
+            }
+        } catch (DuplicateCodeException duplicateCodeException) {
+            System.out.println("取件码重复的异常被捕获到了");
+        }
+        System.out.println("insert = " + insert);
+    }
+
+    @Test
     public void update() {
         Express express = new Express();
         express.setNumber("321");
