@@ -1,6 +1,5 @@
 package com.kaikeba.bean;
 
-import java.sql.Timestamp;
 
 /**
  * 重新封装Express的数据，以String类型作为展示数据

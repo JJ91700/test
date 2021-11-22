@@ -8,6 +8,7 @@ import com.kaikeba.mvc.ResponseBody;
 import com.kaikeba.service.ExpressService;
 import com.kaikeba.util.DateFormatUtil;
 import com.kaikeba.util.JSONUtil;
+import com.kaikeba.util.UserUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,7 +31,6 @@ public class ExpressController {
         String json = JSONUtil.toJSON(msg);
         return json;
     }
-
 
     @ResponseBody("/express/list.do")
     public String list(HttpServletRequest request, HttpServletResponse response) {
@@ -66,4 +66,27 @@ public class ExpressController {
         return json;
     }
 
+    @ResponseBody("/express/insert.do")
+    public String insert(HttpServletRequest request, HttpServletResponse response) {
+        String number = request.getParameter("number");
+        String company = request.getParameter("company");
+        String username = request.getParameter("username");
+        String userPhone = request.getParameter("userPhone");
+
+        String sysPhone = UserUtil.getUserPhone(request.getSession());
+        Express e = new Express(number, username, userPhone, company, sysPhone);
+        boolean flag = ExpressService.insert(e);
+        Message msg = new Message();
+        if (flag) {
+            // 录入成功
+            msg.setStatus(0);
+            msg.setResult("快递录入成功");
+        } else {
+            msg.setStatus(-1);
+            msg.setResult("快递录入失败");
+        }
+
+        String json = JSONUtil.toJSON(msg);
+        return json;
+    }
 }
