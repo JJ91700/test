@@ -11,5 +11,12 @@
 <%--<a href="hello-servlet">Hello Servlet</a>--%>
 <a href="admin/index.html">admin/index.html</a><br />
 <a href="admin/login.html">admin/login.html</a><br />
+<br />
+<br />
+<br />
+<a href="/express/list.do?offset=2&pageNumber=3">/express/list.do</a><br />
+<a href="admin/views/express/list.html">/express/list.do</a><br />
+
+
 </body>
 </html>
