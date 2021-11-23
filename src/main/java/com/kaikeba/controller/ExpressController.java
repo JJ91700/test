@@ -1,5 +1,6 @@
 package com.kaikeba.controller;
 
+import com.alibaba.druid.sql.dialect.sqlserver.visitor.MSSQLServerExportParameterVisitor;
 import com.kaikeba.bean.BootstrapTableExpress;
 import com.kaikeba.bean.Express;
 import com.kaikeba.bean.Message;
@@ -86,6 +87,69 @@ public class ExpressController {
             msg.setResult("快递录入失败");
         }
 
+        String json = JSONUtil.toJSON(msg);
+        return json;
+    }
+
+    @ResponseBody("/express/find.do")
+    public String find(HttpServletRequest request, HttpServletResponse response) {
+        String number = request.getParameter("number");
+        Express e = ExpressService.findByNumber(number);
+        Message msg = new Message();
+        if (e == null) {
+            msg.setStatus(-1);
+            msg.setResult("查询的快递单号不存在");
+        } else {
+            msg.setStatus(0);
+            msg.setResult("查询成功");
+            msg.setData(e);
+        }
+
+        String json = JSONUtil.toJSON(msg);
+        return json;
+    }
+
+    @ResponseBody("/express/update.do")
+    public String update(HttpServletRequest request, HttpServletResponse response) {
+        int id = Integer.parseInt(request.getParameter("id"));
+        String number = request.getParameter("number");
+        String company = request.getParameter("company");
+        String username = request.getParameter("username");
+        String userPhone = request.getParameter("userPhone");
+        int status = Integer.parseInt(request.getParameter("status"));
+
+        Express newExpress = new Express();
+        newExpress.setNumber(number);
+        newExpress.setCompany(company);
+        newExpress.setUsername(username);
+        newExpress.setUserPhone(userPhone);
+        newExpress.setStatus(status);
+        boolean update = ExpressService.update(id, newExpress);
+        Message msg = new Message();
+        if (update) {
+            msg.setStatus(0);
+            msg.setResult("修改成功");
+        } else {
+            msg.setStatus(-1);
+            msg.setResult("修改失败");
+        }
+
+        String json = JSONUtil.toJSON(msg);
+        return json;
+    }
+
+    @ResponseBody("/express/delete.do")
+    public String delete(HttpServletRequest request, HttpServletResponse response) {
+        int id = Integer.parseInt(request.getParameter("id"));
+        boolean delete = ExpressService.delete(id);
+        Message msg = new Message();
+        if (delete) {
+            msg.setStatus(0);
+            msg.setResult("删除成功");
+        } else {
+            msg.setStatus(-1);
+            msg.setResult("删除失败");
+        }
         String json = JSONUtil.toJSON(msg);
         return json;
     }
