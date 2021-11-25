@@ -4,7 +4,7 @@ import javax.servlet.http.HttpSession;
 
 public class UserUtil {
     public static String getUserName(HttpSession session) {
-        return "";
+        return (String) session.getAttribute("adminUserName");
     }
 
     public static String getUserPhone(HttpSession session) {
