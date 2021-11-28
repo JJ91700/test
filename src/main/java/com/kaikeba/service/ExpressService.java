@@ -105,6 +105,8 @@ public class ExpressService {
      * @param id         要修改的快递id
      * @param newExpress 要录入的快递对象（number, company, username, userPhone)
      * @return 录入的结果，true成功，false失败
+     *
+     * TODO: 有逻辑漏洞，如果update的是除了userPhone以外的全部信息，没办法find再update
      */
     public static boolean update(int id, Express newExpress) {
         if (newExpress.getUserPhone() != null) {
