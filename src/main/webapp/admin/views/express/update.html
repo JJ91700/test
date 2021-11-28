@@ -54,6 +54,60 @@
 	var expressId = null;
 	var g_userPhone = null;
 	$(function(){
+
+		function validateCode() {
+			var getInput = $(".input:eq(1)").val();
+			var res = /^[a-zA-Z0-9]\w{2,}/.test(getInput);
+			console.log(res);
+			if (res == true) {
+				layer.msg("validateCode OK");
+				return true;
+			} else {
+				layer.msg("validateCode NG");
+				return false;
+			}
+		}
+
+		function validateSelectCompany() {
+			var getInput = $(".input:eq(2)").val();
+			console.log(getInput);
+			return true;
+		}
+		// 事实上，required属性已经足够，这一步不需要做
+		function validateName() {
+			var name = $(".input:eq(3)").val();
+			return name != "";
+		}
+
+		function validatePhone() {
+			var getInput = $(".input:eq(4)").val();
+			var res = /(1[345789]\d{9,})/.test(getInput);
+			if (res == true) {
+				layer.msg("validatePhone OK");
+				return true;
+			} else {
+				layer.msg("validatePhone NG");
+				return false;
+			}
+		}
+
+		function ValidateAll() {
+			return validateCode() && validateSelectCompany() && validateName() && validatePhone();
+		}
+
+		$(".input:eq(1)").blur(function () {
+			validateCode();
+		});
+		$(".input:eq(2)").blur(function () {
+			validateSelectCompany();
+		});
+		$(".input:eq(3)").blur(function () {
+			validateName();
+		});
+		$(".input:eq(4)").blur(function () {
+			validatePhone();
+		});
+
 		$("#find").click(function(){
 			var windowId = layer.load();
 			var number = $("#number").val();
@@ -81,6 +135,10 @@
 		});
 
 		$("#update").click(function(){
+			if (ValidateAll() == false) {
+				alert("信息有误，请检查");
+				return false;
+			}
 			var windowId = layer.load();
 			var number = $("input:eq(1)").val();
 			var company = $("input:eq(2)").val();
