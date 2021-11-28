@@ -124,6 +124,8 @@ public class ExpressController {
         newExpress.setUsername(username);
         newExpress.setUserPhone(userPhone);
         newExpress.setStatus(status);
+        String sysPhone = UserUtil.getUserPhone(request.getSession());
+        newExpress.setSysPhone(sysPhone);
         boolean update = ExpressService.update(id, newExpress);
         Message msg = new Message();
         if (update) {
