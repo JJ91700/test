@@ -37,7 +37,45 @@
 <script src="../layer/layer.js"></script>
 <script>
     $(function () {
+        function validateUsername() {
+            var getInput = $("#username").val();
+            var res = /^[a-zA-Z0-9]\w{2,}/.test(getInput);
+            if (getInput == "") {
+                layer.msg("用户名不能为空");
+                return false;
+            }
+            if (res == false) {
+                layer.msg("用户名不合法，请重试");
+                return false;
+            }
+            return true;
+        }
+
+        function validatePassword() {
+            var getInput = $("#password").val();
+            var res = /^[a-zA-Z0-9]\w{2,}/.test(getInput);
+            if (getInput == "") {
+                layer.msg("密码不能为空");
+                return false;
+            }
+            if (res == false) {
+                layer.msg("密码不合法，请重试");
+                return false;
+            }
+
+            return true;
+        }
+
+        function validateAll() {
+            return validateUsername() && validatePassword();
+        }
+
         $(".login-button").click(function () {
+            if (validateAll() == false) {
+                layer.msg("用户名或者密码不正确，请重试");
+                return false;
+            }
+
             var username = $("#username").val();
             var password = $("#password").val();
             // TODO: 页面的数据验证，长度，格式，字符
