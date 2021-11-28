@@ -158,12 +158,16 @@
 			}
 			$.getJSON("/express/update.do",express,function(data){
 				layer.close(windowId);
-				layer.msg(data.result)
+				// layer.msg(data.result);	// 返回成功/失败的消息
+				layer.msg(data.result, {time: 2000}, function () {
+					if(data.status == 0){
+						//修改成功的
+						$(".header:eq(1),.content:eq(1)").hide();
+					} else {
+						$("#find").click();
+					}
 
-				if(data.status == 0){
-					//修改成功的
-					$(".header:eq(1),.content:eq(1)").hide();
-				}
+				});
 			})
 		});
 	});
