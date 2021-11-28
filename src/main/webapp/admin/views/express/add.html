@@ -12,17 +12,17 @@
         <div class="layui-row">
             <div class="layui-card">
                 <div class="layui-card-header">录入快件</div>
-                <form id="form" class="layui-form layui-card-body" >
+                <form id="form" class="layui-form layui-card-body" onsubmit="return ValidateAll()">
                   <div class="layui-form-item">
                     <label class="layui-form-label">单号</label>
                     <div class="layui-input-block">
-                      <input type="text" name="code" required  lay-verify="required" placeholder="请输入快递单号" autocomplete="off" class="layui-input">
+                      <input id="idInputCode" type="text" name="code" required  lay-verify="required" placeholder="请输入快递单号" autocomplete="off" class="layui-input">
                     </div>
                   </div>
                   <div class="layui-form-item">
                     <label class="layui-form-label">快递公司</label>
                     <div class="layui-input-block">
-                      <select name="company" lay-verify="" lay-search>
+                      <select id="idSelectCompany" name="company" lay-verify="" lay-search>
 						<option >安能快递</option><option >安能物流</option><option >澳大利亚邮政</option><option >阿根廷邮政</option><option >爱沙尼亚邮政</option><option >阿联酋邮政</option><option >奥地利邮政</option><option >阿尔巴尼亚邮政</option><option >Aramex</option><option >巴西邮政</option><option >比利时邮政</option><option >百世快运</option><option >波兰邮政</option><option >白俄罗斯邮政</option><option >保加利亚邮政</option><option >巴基斯坦邮政</option><option >百福东方</option><option >包裹信件</option><option >晟邦物流</option><option >城市100</option><option >City-Link</option><option >COE</option><option >传喜物流</option><option >德邦快递</option><option >大田物流</option><option >递四方</option><option >DHL德国</option><option >DHL全球</option><option >DHL中国</option><option >EMS</option><option >EMS国际</option><option >EMS经济快递</option><option >FedEx中国</option><option >FedEx国际</option><option >FedEx美国</option><option >飞豹快递</option><option >凡宇快递</option><option >飞远配送</option><option >飞远(爱彼西)</option><option >法国邮政</option><option >芬兰邮政</option><option >国通快递</option><option >postco</option><option >百世快递</option><option >恒路物流</option><option >黄马甲配送</option><option >黑猫宅急便</option><option >华企快运</option><option >韩国邮政</option><option >佳吉快运</option><option >京东快递</option><option >佳怡物流</option><option "jinguangsudikuaijian">京广速递</option><option >日本邮政</option><option >筋斗云物流</option><option >捷克邮政</option><option >嘉里大通</option><option >加运美</option><option >快捷快递</option><option >跨越速运</option><option >克罗地亚邮政</option><option >联昊通</option><option >龙邦速递</option><option >黎巴嫩邮政</option><option >民航快递</option><option >秘鲁邮政</option><option >毛里求斯邮政</option><option >马耳他邮政</option><option >摩尔多瓦邮政</option><option >马其顿邮政</option><option >民邦快递</option><option "szml56">明亮物流</option><option >挪威邮政</option><option >南非邮政</option><option >OnTrac</option><option >葡萄牙邮政</option><option >全峰快递</option><option >全一快递</option><option >如风达</option><option >申通快递</option><option selected="selected">顺丰速运</option><option >速尔快递</option><option >盛丰物流</option><option >圣安物流</option><option >盛辉物流</option><option >瑞士邮政</option><option >苏宁快递</option><option >斯洛伐克邮政</option><option >沙特邮政</option><option >斯洛文尼亚邮政</option><option >塞尔维亚邮政</option><option >天天快递</option><option >天地华宇</option><option >土耳其邮政</option><option >泰国邮政</option><option >TNT</option><option >UPS</option><option >USPS</option><option >万象物流</option><option >乌克兰邮政</option><option >万家物流</option><option >信丰物流</option><option >新邦物流</option><option >西班牙邮政</option><option >匈牙利邮政</option><option >圆通速递</option><option >韵达快递</option><option >优速物流</option><option >银捷速递</option><option >远成物流</option><option >运通中港快递</option><option >邮政国内小包</option><option >英国皇家邮政</option><option >意大利邮政</option><option >印度邮政</option><option >亚美尼亚邮政</option><option >越丰物流</option><option >亚风速递</option><option >邮政国际包裹</option><option >中通快递</option><option >宅急送</option><option >中铁物流</option><option >增益速递</option><option >中铁快运</option><option >芝麻开门</option><option >中国邮政</option><option >智利邮政</option><option >中速快递</option>
 					</select>
 
@@ -58,8 +58,94 @@
         ,layer = layui.layer;
     </script>
     <script>
+        function validateCode() {
+            var getInput = $("input[name='code']").val();
+            if (getInput == "") {
+                layer.msg("快递单号不能为空");
+                return false;
+            }
+            else if (/^[a-zA-Z0-9]\w{2,}/.test(getInput) == false) {
+                layer.msg("快递单号不合法，请使用字母/数字开头，不少于3个字符");
+                return false;
+            }
+            return true;
+        }
+
+        function validateSelectCompany() {
+            var getInput = $("select[name='company']").val();
+            // layer.msg(getInput);
+            return true;
+        }
+
+        function validateName() {
+            var name = $(".input:eq(2)").val();
+            return name != "";
+        }
+
+        function validatePhone() {
+            var getInput = $("input[name='phonenumber']").val();
+            var res = /(1[345789]\d{9,})/.test(getInput);
+            if (res == false) {
+                var strRes = "validatePhone " + (res == true ? "OK" : "NG");
+                layer.msg(strRes);
+                return false;
+            }
+            return true;
+        }
+
+        function ValidateAll() {
+            return validateCode() && validateSelectCompany() && validateName() && validatePhone();
+        }
+        
         $(function(){
+            $("input[name='code']").blur(function () {
+                var res = validateCode();
+                // var strRes = "validateCode " + res == true ? "OK" : "NG";
+                // layer.msg(strRes);
+            });
+
+            // 1. id选择器不可能生效了，因为这里class="layui-input-block"重新封装了一层，id与select不能一一对应
+            // 2. 选择方法采用$("input:eq(1)")，表示第1个（从0开始数）的input框（select也当作输入框）
+            // 3. click比blur先触发，单个click或者单个blur使用都没有问题，两个一起使用就有问题，click时产生的alert使blur同时生效，blur生效后再次触发就会进入死循环
+            //      两者获取的值都是当前值，而不是选中后的值；
+            // 4. form.on("select", function(data)) 能获取最终选择的option.value
+            // // $("input[name='company']").change(function () {
+            // // $("select[id='idSelectCompany']").click(function () {
+            // $("#idSelectCompany").change(function () {
+            //     alert("company click");
+            //     // validateSelectCompany();
+            // });
+            $("#idSelectCompany").blur(function () {
+                alert("这个不可能出现，因为id = idSelectCompany 已经不能直接对应到select option");
+            });
+
+            // $("input:eq(1)").click(function () {
+            //    alert("input:eq(1).click = " + this.value);
+            // });
+
+            // $("input:eq(1)").blur(function () {
+            //     alert("input: eq(1). blur = " + this.value);
+            // });
+
+            // 监听
+            // select下拉框选中触发事件
+            form.on("select", function(data){
+                console.log("form.on'select' = " + data.value); // 获取选中的值
+            });
+
+            $("input:eq(2)").blur(function () {
+                console.log(this.value);
+            });
+
+            $("input:eq(3)").blur(function () {
+                var res = validatePhone();
+            });
+
             $("#form").submit(function(){
+                if (ValidateAll() == false) {
+                    layer.msg("信息有误，请检查");
+                    return false;
+                }
                 var windowId = layer.load();
                 var number = $("input:eq(0)").val();    // 第1个输入框
                 var company = $("input:eq(1)").val();   // 第2个输入框
@@ -72,7 +158,7 @@
                     userPhone:userPhone
                     },function(data){
                         layer.close(windowId);
-                        layer.msg(data.result);
+                        layer.msg(data.result);     // 打印post请求返回的结果msg对象
                         if(data.status == 0){
                             //录入成功
                             $("input").val("");             // 清空所有的输入框
@@ -82,11 +168,8 @@
                             // 可能失败的原因？取件码重复？还是别的？
                         }
                 });
-
                 return false;   // 返回false就不能提交form
             });
-
-
         });
     </script>
 </body>
