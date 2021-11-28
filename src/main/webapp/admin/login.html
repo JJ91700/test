@@ -39,7 +39,8 @@
     $(function () {
         function validateUsername() {
             var getInput = $("#username").val();
-            var res = /^[a-zA-Z0-9]\w{2,}/.test(getInput);
+            // var res = /^[a-zA-Z0-9]\w{2,}/.test(getInput);
+            var res = true;
             if (getInput == "") {
                 layer.msg("用户名不能为空");
                 return false;
