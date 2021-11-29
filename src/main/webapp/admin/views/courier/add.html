@@ -26,7 +26,7 @@
 						<td class="text-right">密码</td><td class="content_right"><input class="input" placeholder="请输入姓名"></td>
 					</tr>
 					<tr>
-						<td></td><td class="content_right"><span class="btn btn-info">立即提交</span> <span class="btn">重置</span> </td>
+						<td></td><td class="content_right"><span id="idBtnSubmit" class="btn btn-info">立即提交</span> <span class="btn">重置</span> </td>
 					</tr>
 				</table>
 				
@@ -34,4 +34,37 @@
 			</div>
 		</div>
 	</body>
+	<script src="../../assets/layui.all.js"></script>
+	<script src="/qrcode/jquery2.1.4.js"></script>
+	<script src="/layer/layer.js"></script>
+<!--	<script type="text/javascript">-->
+	<script>
+		layer = layui.layer;
+
+		$(function () {
+			$("#idBtnSubmit").click(function () {
+				var windowId = layer.load();
+				var userName = $(".input:eq(0)").val();
+				var userPhone = $(".input:eq(1)").val();
+				var cardId = $(".input:eq(2)").val();
+				var password = $(".input:eq(3)").val();
+				var courier = {
+					userName: userName,
+					userPhone: userPhone,
+					cardId: cardId,
+					password: password
+				};
+				$.post("/courier/insert.do", courier, function (msg) {
+					layer.close(windowId);
+					layer.msg(msg.result, {time: 2000}, function () {
+						if (msg.status == 0) {
+							$(".input").val("");
+						} else {
+							layer.msg("请重试");
+						}
+					});
+				});
+			});
+		});
+	</script>
 </html>
