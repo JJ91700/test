@@ -62,9 +62,9 @@ public class CourierController {
     public String list(HttpServletRequest req, HttpServletResponse resp) {
         String json = null;
         int offset = Integer.parseInt(req.getParameter("offset"));
-        System.out.println("offset = " + offset);
+//        System.out.println("offset = " + offset);
         int pageNumber = Integer.parseInt(req.getParameter("pageNumber"));
-        System.out.println("pageNumber = " + pageNumber);
+//        System.out.println("pageNumber = " + pageNumber);
 
         CourierService service = new CourierService();
         List<Courier> list = service.findAll(true, offset, pageNumber);
@@ -86,6 +86,32 @@ public class CourierController {
         data.setTotal(total);
 
         json = JSONUtil.toJSON(data);
+        return json;
+    }
+
+    @ResponseBody("/courier/find.do")
+    public String find(HttpServletRequest req, HttpServletResponse resp) {
+        String json = null;
+        String userPhone = req.getParameter("phone");
+        CourierService service = new CourierService();
+        Courier courier = service.findByUserPhone(userPhone);
+        System.out.println("courier = " + courier);
+        Message msg = new Message();
+
+        if (courier == null) {
+            // 查无此人
+            msg.setStatus(-1);
+            msg.setResult("此手机号码尚未注册");
+        } else {
+            // 查到了
+            msg.setStatus(0);
+            msg.setResult("查询到快递员信息");
+            msg.setData(courier);
+        }
+
+        json = JSONUtil.toJSON(msg);
+        System.out.println("json = " + json);
+        System.out.println("msg = " + msg);
         return json;
     }
 }

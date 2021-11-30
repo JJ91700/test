@@ -14,7 +14,7 @@
 			<div class="content">
 				<table>	
 					<tr>
-						<td class="text-right">手机号码</td><td class="content_right"><input class="input inline-input" placeholder="请输入手机号码"> <span class="btn btn-info">立即查找</span></td>
+						<td class="text-right">手机号码</td><td class="content_right"><input id="idPhone" class="input inline-input" placeholder="请输入手机号码"> <span id="idFind" class="btn btn-info">立即查找</span></td>
 					</tr>
 				</table>
 			</div>
@@ -44,4 +44,32 @@
 			</div>
 		</div>
 	</body>
+	<script src="/qrcode/jquery2.1.4.js"></script>
+	<script src="/layer/layer.js"></script>
+	<script>
+		$(".header:eq(1), .content:eq(1)").hide();
+		$(function () {
+			$("#idFind").click(function () {
+				var windowId = layer.load();
+				var phone = $("#idPhone").val();
+				alert("phone = " + phone);
+				$.getJSON("/courier/find.do", {phone: phone}, function (message) {
+					layer.close(windowId);
+					layer.msg(message.result, {time: 1000}, function () {
+						if (message.status == 0) {
+							// 查找成功
+							$(".header:eq(1), .content:eq(1)").fadeIn(1000);
+							$(".input:eq(1)").val(message.data.userName);
+							$(".input:eq(2)").val(message.data.userPhone);
+							$(".input:eq(3)").val(message.data.cardId);
+							$(".input:eq(4)").val(message.data.password);
+						} else {
+							// 查找失败
+							layer.msg("请重试或者退出");
+						}
+					});
+				})
+			})
+		});
+	</script>
 </html>
