@@ -149,4 +149,12 @@ public class Courier {
     public void setLoginIp(String loginIp) {
         this.loginIp = loginIp;
     }
+
+    public Integer getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Integer admin) {
+        this.admin = admin;
+    }
 }
