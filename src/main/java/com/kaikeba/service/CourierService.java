@@ -60,7 +60,17 @@ public class CourierService {
      * @return 快递员列表
      */
     public List<Courier> findAll(boolean limit, int offset, int pageNumber) {
-        return findAll(limit, offset, pageNumber);
+        return dao.findAll(limit, offset, pageNumber);
+    }
+
+
+    /**
+     * 查询数据库，获取快递员的数量
+     * @param toDate        <0为所有快递员，toDate=几天内新增快递员
+     * @return              返回快递员数量
+     */
+    public Integer count(int toDate) {
+        return dao.count(toDate);
     }
 
     /**

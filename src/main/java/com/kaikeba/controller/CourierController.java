@@ -1,13 +1,18 @@
 package com.kaikeba.controller;
 
+import com.kaikeba.bean.BootstrapTableCourier;
 import com.kaikeba.bean.Courier;
 import com.kaikeba.bean.Message;
+import com.kaikeba.bean.ResultData;
 import com.kaikeba.mvc.ResponseBody;
 import com.kaikeba.service.CourierService;
+import com.kaikeba.util.DateFormatUtil;
 import com.kaikeba.util.JSONUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CourierController {
 
@@ -50,6 +55,37 @@ public class CourierController {
         }
 
         json = JSONUtil.toJSON(msg);
+        return json;
+    }
+
+    @ResponseBody("/courier/list.do")
+    public String list(HttpServletRequest req, HttpServletResponse resp) {
+        String json = null;
+        int offset = Integer.parseInt(req.getParameter("offset"));
+        System.out.println("offset = " + offset);
+        int pageNumber = Integer.parseInt(req.getParameter("pageNumber"));
+        System.out.println("pageNumber = " + pageNumber);
+
+        CourierService service = new CourierService();
+        List<Courier> list = service.findAll(true, offset, pageNumber);
+        List<BootstrapTableCourier> listShow = new ArrayList();
+        for (Courier c : list) {
+            String sendExpress = c.getSendExpress().toString();
+            String createTime = DateFormatUtil.format(c.getCreateTime());
+            String loginTime = DateFormatUtil.format(c.getLoginTime());
+            String admin = c.getAdmin() == 1 ? "管理员" : "快递员";
+
+            BootstrapTableCourier showCourier = new BootstrapTableCourier(c.getId(), c.getUserName(), c.getUserPhone(),
+                    c.getCardId(), c.getPassword(), sendExpress, createTime, loginTime, c.getLoginIp(), admin);
+            listShow.add(showCourier);
+        }
+
+        ResultData<BootstrapTableCourier> data = new ResultData<>();
+        int total = service.count(-1);
+        data.setRows(listShow);
+        data.setTotal(total);
+
+        json = JSONUtil.toJSON(data);
         return json;
     }
 }
