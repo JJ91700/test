@@ -57,6 +57,14 @@ public class Courier {
         this.admin = admin;
     }
 
+    public Courier(Integer id, String userName, String userPhone, String cardId, String password) {
+        this.id = id;
+        this.userName = userName;
+        this.userPhone = userPhone;
+        this.cardId = cardId;
+        this.password = password;
+    }
+
     public Courier() {
     }
 

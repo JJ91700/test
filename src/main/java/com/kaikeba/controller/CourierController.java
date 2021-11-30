@@ -95,7 +95,7 @@ public class CourierController {
         String userPhone = req.getParameter("phone");
         CourierService service = new CourierService();
         Courier courier = service.findByUserPhone(userPhone);
-        System.out.println("courier = " + courier);
+//        System.out.println("courier = " + courier);
         Message msg = new Message();
 
         if (courier == null) {
@@ -110,8 +110,33 @@ public class CourierController {
         }
 
         json = JSONUtil.toJSON(msg);
-        System.out.println("json = " + json);
-        System.out.println("msg = " + msg);
+//        System.out.println("json = " + json);
+//        System.out.println("msg = " + msg);
+        return json;
+    }
+
+    @ResponseBody("/courier/update.do")
+    public String update(HttpServletRequest req, HttpServletResponse resp) {
+        String json = null;
+        int id = Integer.parseInt(req.getParameter("id"));
+        String userName = req.getParameter("userName");
+        String userPhone = req.getParameter("userPhone");
+        String cardId = req.getParameter("cardId");
+        String password = req.getParameter("password");
+
+        Courier courier = new Courier(id, userName, userPhone, cardId, password);
+        CourierService service = new CourierService();
+        Boolean update = service.update(null, courier);
+        Message msg = new Message();
+        if (update) {
+            msg.setStatus(0);
+            msg.setResult("快递员信息更新成功");
+        } else {
+            msg.setStatus(-1);
+            msg.setResult("快递员信息更新失败");
+        }
+
+        json = JSONUtil.toJSON(msg);
         return json;
     }
 }

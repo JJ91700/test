@@ -19,7 +19,7 @@ public class CourierDaoMysql implements BaseCourierDao {
     // VALUES(NULL, "赵六", "13666666666", "447123456789", "876543", 0, NOW(), NOW(), "127.0.0.1", 0);
     private static final String SQL_INSERT_COURIER = "INSERT INTO eadmin (id, username, userphone, cardid, `password`, sendexpress, createtime, logintime, loginip, admin) VALUES(NULL, ?, ?, ?, ?, 0, NOW(), NOW(), ?, 0)";
 
-    private static final String SQL_UPDATE = "UPDATE eadmin SET username=?, userphone=?, cardid=?, `password`=? WHERE userphone=?";
+    private static final String SQL_UPDATE = "UPDATE eadmin SET username=?, userphone=?, cardid=?, `password`=? WHERE id=?";
 
     private static final String SQL_DELETE = "DELETE FROM eadmin WHERE userphone=?";
     private static final String SQL_FIND_ALL_WITHOUT_LIMIT = "SELECT * FROM eadmin";
@@ -143,7 +143,8 @@ public class CourierDaoMysql implements BaseCourierDao {
             state.setString(3, newCourier.getCardId());
             state.setString(4, newCourier.getPassword());
 
-            state.setString(5, oldCourier.getUserPhone());
+            //state.setString(5, oldCourier.getUserPhone());
+            state.setInt(5, newCourier.getId());
 
             // 4. 执行
             // 5. 获取结果
