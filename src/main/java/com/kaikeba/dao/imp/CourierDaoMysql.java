@@ -26,6 +26,10 @@ public class CourierDaoMysql implements BaseCourierDao {
     private static final String SQL_FIND_ALL_WITH_LIMIT = "SELECT * FROM eadmin LIMIT ?, ?";
     private static final String SQL_SET_ADMIN = "UPDATE eadmin SET `admin`=? WHERE `userPhone`=?";
     private static final String SQL_REMOVE_ADMIN = "UPDATE eadmin SET `admin`=? WHERE `userPhone`=?";
+    // =0为当前一天，>0为昨天及其前面所有的记录
+    private static final String SQL_COUNT_ALL = "SELECT COUNT(*) count_courier FROM eadmin WHERE TO_DAYS(NOW())-TO_DAYS(createtime)>=0";
+    // <=0为当前一天，<=1为昨天和今天，<=2为前天，昨天和今天
+    private static final String SQL_COUNT_TO_DAYS = "SELECT COUNT(*) count_courier FROM eadmin WHERE TO_DAYS(NOW())-TO_DAYS(createtime)<=?";
 
     /**
      * 查询数据库，搜索手机号，得到快递员对象
@@ -217,7 +221,9 @@ public class CourierDaoMysql implements BaseCourierDao {
                         rs.getString("password"),
                         rs.getInt("sendExpress"),
                         rs.getTimestamp("createTime"),
-                        rs.getTimestamp("loginTime"));
+                        rs.getTimestamp("loginTime"),
+                        rs.getString("loginIp"),
+                        rs.getInt("admin"));
                 list.add(courier);
             }
         } catch (SQLException throwables) {
@@ -226,6 +232,37 @@ public class CourierDaoMysql implements BaseCourierDao {
             DruidUtil.close(conn, state, rs);
         }
         return list;
+    }
+
+    /**
+     * 查询数据库，获取快递员的数量
+     *
+     * @param toDate <0为所有快递员，toDate=几天内新增快递员
+     * @return 返回快递员数量
+     */
+    @Override
+    public Integer count(int toDate) {
+        int count = 0;
+        Connection conn = DruidUtil.getConnection();
+        PreparedStatement state = null;
+        ResultSet rs = null;
+        try {
+            if (toDate < 0) {
+                state = conn.prepareStatement(SQL_COUNT_ALL);
+            } else {
+                state = conn.prepareStatement(SQL_COUNT_TO_DAYS);
+                state.setInt(1, toDate);
+            }
+            rs = state.executeQuery();
+            while (rs.next()) {
+                count = rs.getInt("count_courier");
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            DruidUtil.close(conn, state, rs);
+        }
+        return count;
     }
 
     /**

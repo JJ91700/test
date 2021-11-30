@@ -44,6 +44,13 @@ public interface BaseCourierDao {
     List<Courier> findAll(boolean limit, int offset, int pageNumber);
 
     /**
+     * 查询数据库，获取快递员的数量
+     * @param toDate        <0为所有快递员，toDate=几天内新增快递员
+     * @return              返回快递员数量
+     */
+    Integer count(int toDate);
+
+    /**
      * 更新数据库，设置快递员为管理员（dao是原子操作，权限需要在service层做限制，只有管理员才能设置其他快递员为管理员）
      * @param userPhone     设置手机号为userPhone的快递员为管理员
      * @return              true=成功，false=失败

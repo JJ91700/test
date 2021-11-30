@@ -74,6 +74,30 @@ public class CourierDaoMysqlTest {
     }
 
     @Test
+    public void countAll() {
+        Integer count = dao.count(-1);
+        System.out.println("count = " + count);
+    }
+
+    @Test
+    public void countToday() {
+        Integer count = dao.count(0);
+        System.out.println("count = " + count);
+    }
+
+    @Test
+    public void countYesterdayToNow() {
+        Integer count = dao.count(1);
+        System.out.println("count = " + count);
+    }
+
+    @Test
+    public void countTheDayBeforeYesterdayToNow() {
+        Integer count = dao.count(2);
+        System.out.println("count = " + count);
+    }
+
+    @Test
     public void addAdmin() {
         Boolean addAdmin = dao.addAdmin("18755555533");
         System.out.println("addAdmin = " + addAdmin);
