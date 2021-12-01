@@ -30,7 +30,7 @@ public class CourierDaoMysqlTest {
             Date date = new Date();
             Courier courier = new Courier(10 + i, "周八" + i, "18755555532",
                     "446123456789", "741852", 0, new java.sql.Timestamp(date.getTime()),
-                    new java.sql.Timestamp(date.getTime()), "127.0.0.1", 0);
+                    new java.sql.Timestamp(date.getTime()), "127.0.0.1");
             Boolean insert = dao.insert(courier);
             if (!insert) {
                 System.out.println("insert = " + insert);
@@ -95,17 +95,5 @@ public class CourierDaoMysqlTest {
     public void countTheDayBeforeYesterdayToNow() {
         Integer count = dao.count(2);
         System.out.println("count = " + count);
-    }
-
-    @Test
-    public void addAdmin() {
-        Boolean addAdmin = dao.addAdmin("18755555533");
-        System.out.println("addAdmin = " + addAdmin);
-    }
-
-    @Test
-    public void removeAdmin() {
-        Boolean removeAdmin = dao.removeAdmin("18755555533");
-        System.out.println("removeAdmin = " + removeAdmin);
     }
 }

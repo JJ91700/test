@@ -72,24 +72,4 @@ public class CourierService {
     public Integer count(int toDate) {
         return dao.count(toDate);
     }
-
-    /**
-     * 更新数据库，设置快递员为管理员（dao是原子操作，权限需要在service层做限制，只有管理员才能设置其他快递员为管理员）
-     *
-     * @param userPhone 设置手机号为userPhone的快递员为管理员
-     * @return true=成功，false=失败
-     */
-    public Boolean addAdmin(String userPhone) {
-        return dao.addAdmin(userPhone);
-    }
-
-    /**
-     * 更新数据库，移除管理员（dao是原子操作，权限需要在service层做限制，只有管理员才能设置其他快递员为管理员）
-     *
-     * @param userPhone 设置手机号为userPhone的管理员为普通快递员
-     * @return true=成功, false=失败
-     */
-    public Boolean removeAdmin(String userPhone) {
-        return dao.removeAdmin(userPhone);
-    }
 }

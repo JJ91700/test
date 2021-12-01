@@ -73,10 +73,9 @@ public class CourierController {
             String sendExpress = c.getSendExpress().toString();
             String createTime = DateFormatUtil.format(c.getCreateTime());
             String loginTime = DateFormatUtil.format(c.getLoginTime());
-            String admin = c.getAdmin() == 1 ? "管理员" : "快递员";
 
             BootstrapTableCourier showCourier = new BootstrapTableCourier(c.getId(), c.getUserName(), c.getUserPhone(),
-                    c.getCardId(), c.getPassword(), sendExpress, createTime, loginTime, c.getLoginIp(), admin);
+                    c.getCardId(), c.getPassword(), sendExpress, createTime, loginTime, c.getLoginIp());
             listShow.add(showCourier);
         }
 
@@ -95,7 +94,6 @@ public class CourierController {
         String userPhone = req.getParameter("phone");
         CourierService service = new CourierService();
         Courier courier = service.findByUserPhone(userPhone);
-//        System.out.println("courier = " + courier);
         Message msg = new Message();
 
         if (courier == null) {
@@ -110,8 +108,6 @@ public class CourierController {
         }
 
         json = JSONUtil.toJSON(msg);
-//        System.out.println("json = " + json);
-//        System.out.println("msg = " + msg);
         return json;
     }
 

@@ -15,9 +15,9 @@ public class CourierDaoMysql implements BaseCourierDao {
 
     private static final String SQL_FIND_BY_USERPHONE = "SELECT * FROM eadmin WHERE USERPHONE=?";
     // INSERT INTO eadmin
-    //         (id, username, userphone, cardid, password, sendexpress, createtime, logintime, loginip, admin)
-    // VALUES(NULL, "赵六", "13666666666", "447123456789", "876543", 0, NOW(), NOW(), "127.0.0.1", 0);
-    private static final String SQL_INSERT_COURIER = "INSERT INTO eadmin (id, username, userphone, cardid, `password`, sendexpress, createtime, logintime, loginip, admin) VALUES(NULL, ?, ?, ?, ?, 0, NOW(), NOW(), ?, 0)";
+    //         (id, username, userphone, cardid, password, sendexpress, createtime, logintime, loginip)
+    // VALUES(NULL, "赵六", "13666666666", "447123456789", "876543", 0, NOW(), NOW(), "127.0.0.1");
+    private static final String SQL_INSERT_COURIER = "INSERT INTO eadmin (id, username, userphone, cardid, `password`, sendexpress, createtime, logintime, loginip) VALUES(NULL, ?, ?, ?, ?, 0, NOW(), NOW(), ?)";
 
     private static final String SQL_UPDATE = "UPDATE eadmin SET username=?, userphone=?, cardid=?, `password`=? WHERE id=?";
 
@@ -65,8 +65,7 @@ public class CourierDaoMysql implements BaseCourierDao {
                         rs.getInt("sendExpress"),
                         rs.getTimestamp("createTime"),
                         rs.getTimestamp("loginTime"),
-                        rs.getString("loginIp"),
-                        rs.getInt("admin"));
+                        rs.getString("loginIp"));
             }
 
         } catch (SQLException throwables) {
@@ -98,8 +97,8 @@ public class CourierDaoMysql implements BaseCourierDao {
 
             // 3. 填充参数
             // INSERT INTO eadmin
-            //         (id, username, userphone, cardid, password, sendexpress, createtime, logintime, loginip, admin)
-            // VALUES(NULL, "赵六", "13666666666", "447123456789", "876543", 0, NOW(), NOW(), "127.0.0.1", 0);
+            //         (id, username, userphone, cardid, password, sendexpress, createtime, logintime, loginip)
+            // VALUES(NULL, "赵六", "13666666666", "447123456789", "876543", 0, NOW(), NOW(), "127.0.0.1");
             state.setString(1, courier.getUserName());
             state.setString(2, courier.getUserPhone());
             state.setString(3, courier.getCardId());
@@ -223,8 +222,7 @@ public class CourierDaoMysql implements BaseCourierDao {
                         rs.getInt("sendExpress"),
                         rs.getTimestamp("createTime"),
                         rs.getTimestamp("loginTime"),
-                        rs.getString("loginIp"),
-                        rs.getInt("admin"));
+                        rs.getString("loginIp"));
                 list.add(courier);
             }
         } catch (SQLException throwables) {
@@ -264,55 +262,5 @@ public class CourierDaoMysql implements BaseCourierDao {
             DruidUtil.close(conn, state, rs);
         }
         return count;
-    }
-
-    /**
-     * 更新数据库，设置快递员为管理员（dao是原子操作，权限需要在service层做限制，只有管理员才能设置其他快递员为管理员）
-     *
-     * @param userPhone 设置手机号为userPhone的快递员为管理员
-     * @return true=成功，false=失败
-     */
-    @Override
-    public Boolean addAdmin(String userPhone) {
-        boolean result = false;
-        Connection conn = DruidUtil.getConnection();
-        PreparedStatement state = null;
-        ResultSet rs = null;
-        try {
-            state = conn.prepareStatement(SQL_SET_ADMIN);
-            state.setInt(1, 1);
-            state.setString(2, userPhone);
-            result = state.executeUpdate() > 0;
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        } finally {
-            DruidUtil.close(conn, state, rs);
-        }
-        return result;
-    }
-
-    /**
-     * 更新数据库，移除管理员（dao是原子操作，权限需要在service层做限制，只有管理员才能设置其他快递员为管理员）
-     *
-     * @param userPhone 设置手机号为userPhone的管理员为普通快递员
-     * @return true=成功, false=失败
-     */
-    @Override
-    public Boolean removeAdmin(String userPhone) {
-        boolean result = false;
-        Connection conn = DruidUtil.getConnection();
-        PreparedStatement state = null;
-        ResultSet rs = null;
-        try {
-            state = conn.prepareStatement(SQL_REMOVE_ADMIN);
-            state.setInt(1, 0);
-            state.setString(2, userPhone);
-            result = state.executeUpdate() > 0;
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        } finally {
-            DruidUtil.close(conn, state, rs);
-        }
-        return result;
     }
 }

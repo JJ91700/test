@@ -1,6 +1,5 @@
 package com.kaikeba.bean;
 
-import java.sql.Timestamp;
 import java.util.Objects;
 
 /**
@@ -16,7 +15,6 @@ public class BootstrapTableCourier {
     private String createTime;
     private String loginTime;
     private String loginIp;
-    private String admin;
 
     @Override
     public String toString() {
@@ -30,11 +28,10 @@ public class BootstrapTableCourier {
                 ", createTime='" + createTime + '\'' +
                 ", loginTime='" + loginTime + '\'' +
                 ", loginIp='" + loginIp + '\'' +
-                ", admin='" + admin + '\'' +
                 '}';
     }
 
-    public BootstrapTableCourier(Integer id, String userName, String userPhone, String cardId, String password, String sendExpress, String createTime, String loginTime, String loginIp, String admin) {
+    public BootstrapTableCourier(Integer id, String userName, String userPhone, String cardId, String password, String sendExpress, String createTime, String loginTime, String loginIp) {
         this.id = id;
         this.userName = userName;
         this.userPhone = userPhone;
@@ -44,7 +41,6 @@ public class BootstrapTableCourier {
         this.createTime = createTime;
         this.loginTime = loginTime;
         this.loginIp = loginIp;
-        this.admin = admin;
     }
 
     public BootstrapTableCourier() {
@@ -55,12 +51,12 @@ public class BootstrapTableCourier {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BootstrapTableCourier that = (BootstrapTableCourier) o;
-        return Objects.equals(id, that.id) && Objects.equals(userName, that.userName) && Objects.equals(userPhone, that.userPhone) && Objects.equals(cardId, that.cardId) && Objects.equals(password, that.password) && Objects.equals(sendExpress, that.sendExpress) && Objects.equals(createTime, that.createTime) && Objects.equals(loginTime, that.loginTime) && Objects.equals(loginIp, that.loginIp) && Objects.equals(admin, that.admin);
+        return Objects.equals(id, that.id) && Objects.equals(userName, that.userName) && Objects.equals(userPhone, that.userPhone) && Objects.equals(cardId, that.cardId) && Objects.equals(password, that.password) && Objects.equals(sendExpress, that.sendExpress) && Objects.equals(createTime, that.createTime) && Objects.equals(loginTime, that.loginTime) && Objects.equals(loginIp, that.loginIp);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userName, userPhone, cardId, password, sendExpress, createTime, loginTime, loginIp, admin);
+        return Objects.hash(id, userName, userPhone, cardId, password, sendExpress, createTime, loginTime, loginIp);
     }
 
     public Integer getId() {
@@ -133,13 +129,5 @@ public class BootstrapTableCourier {
 
     public void setLoginIp(String loginIp) {
         this.loginIp = loginIp;
-    }
-
-    public String getAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(String admin) {
-        this.admin = admin;
     }
 }

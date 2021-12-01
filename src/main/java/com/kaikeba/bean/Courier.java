@@ -13,7 +13,6 @@ public class Courier {
     private Timestamp createTime;
     private Timestamp loginTime;
     private String loginIp;
-    private Integer admin;
 
     @Override
     public String toString() {
@@ -27,7 +26,6 @@ public class Courier {
                 ", createTime=" + createTime +
                 ", loginTime=" + loginTime +
                 ", loginIp='" + loginIp + '\'' +
-                ", admin=" + admin +
                 '}';
     }
 
@@ -36,15 +34,15 @@ public class Courier {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Courier courier = (Courier) o;
-        return Objects.equals(id, courier.id) && Objects.equals(userName, courier.userName) && Objects.equals(userPhone, courier.userPhone) && Objects.equals(cardId, courier.cardId) && Objects.equals(password, courier.password) && Objects.equals(sendExpress, courier.sendExpress) && Objects.equals(createTime, courier.createTime) && Objects.equals(loginTime, courier.loginTime) && Objects.equals(loginIp, courier.loginIp) && Objects.equals(admin, courier.admin);
+        return Objects.equals(id, courier.id) && Objects.equals(userName, courier.userName) && Objects.equals(userPhone, courier.userPhone) && Objects.equals(cardId, courier.cardId) && Objects.equals(password, courier.password) && Objects.equals(sendExpress, courier.sendExpress) && Objects.equals(createTime, courier.createTime) && Objects.equals(loginTime, courier.loginTime) && Objects.equals(loginIp, courier.loginIp);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userName, userPhone, cardId, password, sendExpress, createTime, loginTime, loginIp, admin);
+        return Objects.hash(id, userName, userPhone, cardId, password, sendExpress, createTime, loginTime, loginIp);
     }
 
-    public Courier(Integer id, String userName, String userPhone, String cardId, String password, Integer sendExpress, Timestamp createTime, Timestamp loginTime, String loginIp, Integer admin) {
+    public Courier(Integer id, String userName, String userPhone, String cardId, String password, Integer sendExpress, Timestamp createTime, Timestamp loginTime, String loginIp) {
         this.id = id;
         this.userName = userName;
         this.userPhone = userPhone;
@@ -54,7 +52,6 @@ public class Courier {
         this.createTime = createTime;
         this.loginTime = loginTime;
         this.loginIp = loginIp;
-        this.admin = admin;
     }
 
     public Courier(Integer id, String userName, String userPhone, String cardId, String password) {
@@ -156,13 +153,5 @@ public class Courier {
 
     public void setLoginIp(String loginIp) {
         this.loginIp = loginIp;
-    }
-
-    public Integer getAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(Integer admin) {
-        this.admin = admin;
     }
 }
