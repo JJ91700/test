@@ -21,7 +21,7 @@ public class CourierDaoMysql implements BaseCourierDao {
 
     private static final String SQL_UPDATE = "UPDATE eadmin SET username=?, userphone=?, cardid=?, `password`=? WHERE id=?";
 
-    private static final String SQL_DELETE = "DELETE FROM eadmin WHERE userphone=?";
+    private static final String SQL_DELETE = "DELETE FROM eadmin WHERE id=?";
     private static final String SQL_FIND_ALL_WITHOUT_LIMIT = "SELECT * FROM eadmin";
     private static final String SQL_FIND_ALL_WITH_LIMIT = "SELECT * FROM eadmin LIMIT ?, ?";
     private static final String SQL_SET_ADMIN = "UPDATE eadmin SET `admin`=? WHERE `userPhone`=?";
@@ -176,7 +176,7 @@ public class CourierDaoMysql implements BaseCourierDao {
         try {
             state = conn.prepareStatement(SQL_DELETE);
             // 3. 填充参数
-            state.setString(1, courier.getUserPhone());
+            state.setInt(1, courier.getId());
 
             // 4. 执行
             // 5. 获取结果

@@ -14,7 +14,7 @@
 			<div class="content">
 				<table>	
 					<tr>
-						<td class="text-right">手机号码</td><td class="content_right"><input class="input inline-input" placeholder="请输入手机号码"> <span class="btn btn-info">立即查找</span></td>
+						<td class="text-right">手机号码</td><td class="content_right"><input id="idPhone" class="input inline-input" placeholder="请输入手机号码"> <span id="idFind" class="btn btn-info">立即查找</span></td>
 					</tr>
 				</table>
 			</div>
@@ -38,10 +38,68 @@
 						<td class="text-right">密码</td><td class="content_right"><input class="input" placeholder="请输入姓名"></td>
 					</tr>
 					<tr>
-						<td></td><td class="content_right"><span class="btn btn-info">立即删除</span> <span class="btn">重置</span> </td>
+						<td></td><td class="content_right"><span id="idDelete" class="btn btn-info">立即删除</span> <span class="btn">重置</span> </td>
 					</tr>
 				</table>
 			</div>
 		</div>
 	</body>
+
+	<script src="/qrcode/jquery2.1.4.js"></script>
+	<script src="/layer/layer.js"></script>
+	<script>
+		$(".header:eq(1), .content:eq(1)").hide();
+		var g_id;
+		$(function () {
+			$("#idFind").click(function () {
+				var windowId = layer.load();
+				var phone = $("#idPhone").val();
+				// alert("phone = " + phone);
+				$.getJSON("/courier/find.do", {phone: phone}, function (message) {
+					layer.close(windowId);
+					layer.msg(message.result, {time: 1000}, function () {
+						if (message.status == 0) {
+							// 查找成功
+							$(".header:eq(1), .content:eq(1)").fadeIn(1000);
+							$(".input:eq(1), .input:eq(2), .input:eq(3), input:eq(4)").prop("disabled", true);
+							$(".input:eq(1)").val(message.data.userName);
+							$(".input:eq(2)").val(message.data.userPhone);
+							$(".input:eq(3)").val(message.data.cardId);
+							$(".input:eq(4)").val(message.data.password);
+							g_id = message.data.id;
+						} else {
+							// 查找失败
+							layer.msg("请重试或者退出");
+						}
+					});
+				});
+			});
+
+			$("#idDelete").click(function () {
+				var windowId = layer.load();
+				$.ajax({
+					url: "/courier/delete.do",
+					data: {id: g_id},			// 请求中包含的parameter是id
+					type: "post",				// 请求的方式为post
+					dataType:"json",			// 预期返回的结果是json格式，这样在message中就可以直接使用json操作，否则，需要解释text，或者其他方式解释返回的信息
+					success: function (message) {
+						layer.close(windowId);	// 请求返回时马上关闭layer窗口
+						layer.msg(message.result, {time: 1000}, function () {
+							console.log("message = " + message);
+							console.log("message.status = " + message.status);
+							if (message.status == 0) {
+								// 删除成功
+								$(".input:eq(1), .input:eq(2), .input:eq(3), .input:eq(4)").val("");
+								$(".header:eq(1), .content:eq(1)").hide();
+							} else {
+								// 删除失败
+								layer.msg("请重试或者退出");
+							}
+						});
+					}
+				}, );
+
+			});
+		});
+	</script>
 </html>

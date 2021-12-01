@@ -139,4 +139,25 @@ public class CourierController {
         json = JSONUtil.toJSON(msg);
         return json;
     }
+
+    @ResponseBody("/courier/delete.do")
+    public String delete(HttpServletRequest req, HttpServletResponse resp) {
+        String json = null;
+        int id = Integer.parseInt(req.getParameter("id"));
+        CourierService service = new CourierService();
+        Courier courier = new Courier();
+        courier.setId(id);
+        Boolean delete = service.delete(courier);
+        Message msg = new Message();
+        if (delete) {
+            msg.setStatus(0);
+            msg.setResult("删除成功");
+        } else {
+            msg.setStatus(-1);
+            msg.setResult("删除失败");
+        }
+
+        json = JSONUtil.toJSON(msg);
+        return json;
+    }
 }
