@@ -53,9 +53,9 @@ public class UserController {
         List<BootstrapTableUser> showUsers = new ArrayList();
         for (User user : originalUsers) {
             Timestamp ts = user.getCreateTime();
-            System.out.println("ts = " + ts);
+            // System.out.println("ts = " + ts);                   // ts = 2021-12-02 04:44:14.0
             String createTime = DateFormatUtil.format(ts);
-            System.out.println("createTime = " + createTime);
+            // System.out.println("createTime = " + createTime);   // createTime = 2021-12-02 04:44:14
 
             String loginTime = DateFormatUtil.format(user.getLoginTime());
             BootstrapTableUser bootstrapTableUser = new BootstrapTableUser(user.getId(), user.getNickName(),
@@ -69,6 +69,49 @@ public class UserController {
         list.setTotal(total);
 
         json = JSONUtil.toJSON(list);
+        return json;
+    }
+
+    @ResponseBody("/user/find.do")
+    public String find(HttpServletRequest req, HttpServletResponse resp) {
+        String json;
+        String userPhone = req.getParameter("userPhone");
+        User user = service.findByUserPhone(userPhone);
+        Message msg = new Message();
+        if (user != null) {
+            msg.setStatus(0);
+            msg.setResult("注册手机号码为 " + userPhone + " 的用户信息查询成功");
+            msg.setData(user);
+        } else {
+            msg.setStatus(-1);
+            msg.setResult("注册手机号码为 " + userPhone + " 的用户信息查询失败");
+        }
+
+        json = JSONUtil.toJSON(msg);
+        return json;
+    }
+
+    @ResponseBody("/user/update.do")
+    public String update(HttpServletRequest req, HttpServletResponse resp) {
+        String json;
+        int id = Integer.parseInt(req.getParameter("id"));
+        String nickName = req.getParameter("nickName");
+        String userPhone = req.getParameter("userPhone");
+        String cardId = req.getParameter("cardId");
+        String password = req.getParameter("password");
+
+        User user = new User(id, nickName, userPhone, cardId, password);
+        Boolean update = service.update(user);
+        Message msg = new Message();
+        if (update) {
+            msg.setStatus(0);
+            msg.setResult("用户信息修改成功");
+        } else {
+            msg.setStatus(-1);
+            msg.setResult("用户信息修改失败");
+        }
+
+        json = JSONUtil.toJSON(msg);
         return json;
     }
 }
