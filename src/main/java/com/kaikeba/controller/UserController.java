@@ -114,4 +114,22 @@ public class UserController {
         json = JSONUtil.toJSON(msg);
         return json;
     }
+
+    @ResponseBody("/user/delete.do")
+    public String delete(HttpServletRequest req, HttpServletResponse resp) {
+        String json;
+        int id = Integer.parseInt(req.getParameter("id"));
+        Boolean delete = service.delete(new User(id));
+        Message msg = new Message();
+        if (delete) {
+            msg.setStatus(0);
+            msg.setResult("删除成功");
+        } else {
+            msg.setStatus(-1);
+            msg.setResult("删除失败");
+        }
+
+        json = JSONUtil.toJSON(msg);
+        return json;
+    }
 }
