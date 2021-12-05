@@ -14,42 +14,94 @@
 
 	</head>
 	<body>
-		<table class="tab tab-hover">
-			<tr class="active">
-				<th>编号</th><th>昵称</th><th>手机号码</th><th>密码</th><th>注册时间</th><th>上次登陆时间</th>
-			</tr>
-			<tr>
-				<td>1001</td>
-				<td>帅哥一枚</td>
-				<td>13843838438</td>
-				<td>******</td>
-				<td>2088-1-1</td>
-				<td>2088-1-1</td>
-			</tr>
-			<tr>
-				<td>1001</td>
-				<td>帅哥一枚</td>
-				<td>13843838438</td>
-				<td>******</td>
-				<td>2088-1-1</td>
-				<td>2088-1-1</td>
-			</tr>
-			<tr>
-				<td>1001</td>
-				<td>帅哥一枚</td>
-				<td>13843838438</td>
-				<td>******</td>
-				<td>2088-1-1</td>
-				<td>2088-1-1</td>
-			</tr>
-			<tr>
-				<td>1001</td>
-				<td>帅哥一枚</td>
-				<td>13843838438</td>
-				<td>******</td>
-				<td>2088-1-1</td>
-				<td>2088-1-1</td>
-			</tr>
+		<table id="idTable" class="tab tab-hover">
+<!--			<tr class="active">-->
+<!--				<th>编号</th><th>昵称</th><th>手机号码</th><th>密码</th><th>注册时间</th><th>上次登陆时间</th>-->
+<!--			</tr>-->
+<!--			<tr>-->
+<!--				<td>1001</td>-->
+<!--				<td>帅哥一枚</td>-->
+<!--				<td>13843838438</td>-->
+<!--				<td>******</td>-->
+<!--				<td>2088-1-1</td>-->
+<!--				<td>2088-1-1</td>-->
+<!--			</tr>-->
+<!--			<tr>-->
+<!--				<td>1001</td>-->
+<!--				<td>帅哥一枚</td>-->
+<!--				<td>13843838438</td>-->
+<!--				<td>******</td>-->
+<!--				<td>2088-1-1</td>-->
+<!--				<td>2088-1-1</td>-->
+<!--			</tr>-->
+<!--			<tr>-->
+<!--				<td>1001</td>-->
+<!--				<td>帅哥一枚</td>-->
+<!--				<td>13843838438</td>-->
+<!--				<td>******</td>-->
+<!--				<td>2088-1-1</td>-->
+<!--				<td>2088-1-1</td>-->
+<!--			</tr>-->
+<!--			<tr>-->
+<!--				<td>1001</td>-->
+<!--				<td>帅哥一枚</td>-->
+<!--				<td>13843838438</td>-->
+<!--				<td>******</td>-->
+<!--				<td>2088-1-1</td>-->
+<!--				<td>2088-1-1</td>-->
+<!--			</tr>-->
+
+			<script>
+				$("#idTable").bootstrapTable({
+					url: "/user/list.do",		// 发起请求地址
+					striped: true,				// 是否显示行的间隔
+					pageNumber: 1,				// 初始化加载第几页
+					pagination: true,			//是否分页
+					sidePagination: "server",	//服务器端做分页
+					pageSize: 5,				//每一页的数据量
+					pageList: [5, 10, 20],		//显示数据量
+					showRefresh: true,			//显示刷新按钮
+					queryParams: function (pageParams) {	//pageParams是从本页面获取的数据，封装成temp对象并提交给请求作为参数
+						var temp = {
+							offset : pageParams.offset,
+							pageNumber: pageParams.limit
+						};
+						return temp;
+					},
+					columns:[
+						{
+							title: "编号",
+							field: "id",
+							sortable: true
+						},
+						{
+							title: "昵称",
+							field: "nickName",
+							sortable: true
+						},
+						{
+							title: "手机号码",
+							field: "userPhone",
+							sortable: true
+						},
+						{
+							title: "密码",
+							field: "password",
+							sortable: true
+						},
+						{
+							title: "注册时间",
+							field: "createTime",
+							sortable: true
+						},
+						{
+							title: "上次登陆时间",
+							field: "loginTime",
+							sortable: true
+						}
+					]
+				});
+			</script>
 		</table>
 	</body>
 </html>
