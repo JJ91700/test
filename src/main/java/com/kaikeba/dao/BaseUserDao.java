@@ -48,4 +48,12 @@ public interface BaseUserDao {
      * @return              返回快递员数量
      */
     Integer count(int toDate);
+
+    /**
+     * 查询数据库，设置user的isCourier属性
+     * @param userPhone     根据userPhone查询数据库
+     * @param isCourier     设置为是否快递员
+     * @return              数据库操作结果，0=失败，1=成功
+     */
+    Boolean setCourier(String userPhone, boolean isCourier);
 }

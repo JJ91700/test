@@ -11,6 +11,7 @@ public class User {
     private String password;
     private Timestamp createTime;
     private Timestamp loginTime;
+    private boolean isCourier;
 
     @Override
     public String toString() {
@@ -69,7 +70,7 @@ public class User {
     public User() {
     }
 
-    public User(Integer id, String nickName, String userPhone, String cardId, String password, Timestamp createTime, Timestamp loginTime) {
+    public User(Integer id, String nickName, String userPhone, String cardId, String password, Timestamp createTime, Timestamp loginTime, boolean isCourier) {
         this.id = id;
         this.nickName = nickName;
         this.userPhone = userPhone;
@@ -77,6 +78,7 @@ public class User {
         this.password = password;
         this.createTime = createTime;
         this.loginTime = loginTime;
+        this.isCourier = isCourier;
     }
 
     public Integer getId() {
@@ -133,5 +135,13 @@ public class User {
 
     public void setLoginTime(Timestamp loginTime) {
         this.loginTime = loginTime;
+    }
+
+    public boolean isCourier() {
+        return isCourier;
+    }
+
+    public void setCourier(boolean courier) {
+        isCourier = courier;
     }
 }

@@ -1,6 +1,7 @@
 package com.kaikeba.service;
 
 import com.kaikeba.bean.Courier;
+import com.kaikeba.bean.User;
 import com.kaikeba.dao.BaseCourierDao;
 import com.kaikeba.dao.imp.CourierDaoMysql;
 
@@ -27,7 +28,16 @@ public class CourierService {
      * @return true=成功, false=失败
      */
     public Boolean insert(Courier courier) {
-        return dao.insert(courier);
+        // 插入时查询，如果手机号已经在用户组中注册过，新增成功之后，再通过userService设置属性setCourier(true);
+        UserService userService = new UserService();
+        User user = userService.findByUserPhone(courier.getUserPhone());
+        boolean result = dao.insert(courier);
+        if (result) {
+            if (user != null) {
+                userService.setCourier(courier.getUserPhone(), true);
+            }
+        }
+        return result;
     }
 
     /**

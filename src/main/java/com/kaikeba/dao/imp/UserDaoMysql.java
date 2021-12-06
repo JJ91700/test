@@ -25,6 +25,7 @@ public class UserDaoMysql implements BaseUserDao {
     private static final String SQL_COUNT_ALL = "SELECT COUNT(*) count_user FROM euser WHERE TO_DAYS(NOW())-TO_DAYS(createtime)>=0";
     // <=0为当前一天，<=1为昨天和今天，<=2为前天，昨天和今天
     private static final String SQL_COUNT_TO_DAYS = "SELECT COUNT(*) count_user FROM euser WHERE TO_DAYS(NOW())-TO_DAYS(createtime)<=?";
+    private static final String SQL_SET_COURIER = "UPDATE euser SET isCourier=? WHERE userPhone=?";
 
     /**
      * 查询数据库，搜索手机号，得到用户对象
@@ -58,7 +59,8 @@ public class UserDaoMysql implements BaseUserDao {
                         rs.getString("cardId"),
                         rs.getString("password"),
                         rs.getTimestamp("createTime"),
-                        rs.getTimestamp("loginTime"));
+                        rs.getTimestamp("loginTime"),
+                        rs.getBoolean("isCourier"));
             }
 
         } catch (SQLException throwables) {
@@ -210,7 +212,8 @@ public class UserDaoMysql implements BaseUserDao {
                         rs.getString("cardId"),
                         rs.getString("password"),
                         rs.getTimestamp("createTime"),
-                        rs.getTimestamp("loginTime"));
+                        rs.getTimestamp("loginTime"),
+                        rs.getBoolean("isCourier"));
                 list.add(user);
             }
         } catch (SQLException throwables) {
@@ -250,5 +253,33 @@ public class UserDaoMysql implements BaseUserDao {
             DruidUtil.close(conn, state, rs);
         }
         return count;
+    }
+
+    /**
+     * 查询数据库，设置user的isCourier属性
+     *
+     * @param userPhone 根据userPhone查询数据库
+     * @param isCourier 设置为是否快递员
+     * @return 数据库操作结果，0=失败，1=成功
+     */
+    @Override
+    public Boolean setCourier(String userPhone, boolean isCourier) {
+        boolean result = false;
+        Connection conn = null;
+        PreparedStatement state = null;
+        ResultSet rs = null;
+        try {
+            conn = DruidUtil.getConnection();
+            state = conn.prepareStatement(SQL_SET_COURIER);
+            state.setBoolean(1, isCourier);
+            state.setString(2, userPhone);
+            int update = state.executeUpdate();
+            result = update > 0;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            DruidUtil.close(conn, state, rs);
+        }
+        return result;
     }
 }
