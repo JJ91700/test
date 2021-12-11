@@ -15,13 +15,13 @@ import java.util.HashMap;
 public class SMSUtil {
 
     public static boolean send(String phoneNumber,String code) {
-        System.out.println("phoneNumber = " + phoneNumber);
+        System.out.println("send SMS phoneNumber = " + phoneNumber);
         System.out.println("code = " + code);
         return true;
     }
 
     public static boolean login(String phoneNumber,String code) {
-        System.out.println("phoneNumber = " + phoneNumber);
+        System.out.println("login SMS phoneNumber = " + phoneNumber);
         System.out.println("code = " + code);
         return true;
     }
