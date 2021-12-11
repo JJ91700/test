@@ -11,7 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 //@WebFilter(filterName = "WxUserAccessControlFilter")
-@WebFilter("/index.html")
+//@WebFilter("/index.html")
+@WebFilter({"/index.html", "/expressList.html"})
 public class WxUserAccessControlFilter implements Filter {
     public void init(FilterConfig config) throws ServletException {
     }

@@ -106,4 +106,18 @@
 			
 	</div>
 </body>
+<script src="qrcode/jquery2.1.4.js"></script>
+<script src="layer/layer.js"></script>
+<script>
+	$(function () {
+		var windowId = layer.load();
+		// 页面加载完成时就要查询用户快递列表，因为用户已经登录成功才能进来，所以，不需要传参数，从session中获取用户数据即可
+		$.getJSON("/wx/findExpressByUserPhone.do", null, function (message) {
+			layer.close(windowId);
+			layer.msg(message.result, {time: 1000}, function () {
+
+			});
+		});
+	});
+</script>
 </html>
