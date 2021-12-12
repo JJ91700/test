@@ -1,4 +1,4 @@
-package com.kaikeba.filter;
+package com.kaikeba.wx.filter;
 
 import com.kaikeba.bean.Courier;
 import com.kaikeba.bean.User;
