@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../../css/reset.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/add.css"/>
+	</head>
+	<body>
+		<div id="app">
+			<div class="header">
+				<span>修改快递员</span>
+			</div>
+			<div class="content">
+				<table>	
+					<tr>
+						<td class="text-right">手机号码</td><td class="content_right"><input class="input inline-input" placeholder="请输入手机号码"> <span id="idBtnFind" class="btn btn-info">立即查找</span></td>
+					</tr>
+				</table>
+			</div>
+			
+			
+			<div class="header">
+				<span>查找信息如下</span>
+			</div>
+			<div class="content">
+				<table>
+					<tr>
+						<td class="text-right">姓名</td><td class="content_right"><input class="input" placeholder="请输入姓名"></td>
+					</tr>
+					<tr>
+						<td class="text-right">手机号码</td><td class="content_right"><input class="input" placeholder="请输入手机号码"></td>
+					</tr>
+					<tr>
+						<td class="text-right">身份证号码</td><td class="content_right"><input class="input" placeholder="请输入身份证号码"></td>
+					</tr>
+					<tr>
+						<td class="text-right">密码</td><td class="content_right"><input class="input" placeholder="请输入密码"></td>
+					</tr>
+					<tr>
+						<td></td><td class="content_right"><span id="idBtnUpdate" class="btn btn-info">立即修改</span> <span id="idBtnReset" class="btn">重置</span> </td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</body>
+	<script src="/admin/assets/layui.all.js"></script>
+	<script src="/qrcode/jquery2.1.4.js"></script>
+	<script src="/layer/layer.js"></script>
+<script>
+	var layer = layui.layer;
+	var g_id;	// 保存用户信息的id的全局变量
+	$(function () {
+		$(".header:eq(1), .content:eq(1)").hide();						// 尚未查询到用户信息，先隐藏
+
+		$("#idBtnFind").click(function () {
+			if (validateOne($(".input:eq(0)").val(), "", "手机号码不合法") === false) {
+				return false;
+			}
+			var windowId = layer.load();								// 先显示忙碌状态
+			var temp = {
+				userPhone: $(".input:eq(0)").val()
+			}
+			$.get("/user/find.do", temp, function (message) {			// get方式发起请求，请求信息包含temp的json数据，message为返回的json格式数据
+				layer.close(windowId);									// 关闭忙碌状态
+				layer.msg(message.result, {time: 1000}, function () {	// 先显示message的result，延时1000ms，再展示用户信息
+					if (message.status === 0) {
+						$(".header:eq(1), .content:eq(1)").fadeIn(1000);// 用户信息淡入
+						$(".input:eq(1)").val(message.data.nickName);
+						$(".input:eq(2)").val(message.data.userPhone);
+						$(".input:eq(3)").val(message.data.cardId);
+						$(".input:eq(4)").val(message.data.password);
+						g_id = message.data.id;							// 保存用户信息的id到全局变量
+					} else {
+						layer.msg("手机号 " + $(".input:eq(0)").val() + " 没有注册");
+						$(".header:eq(1), .content:eq(1)").hide();
+					}
+				});
+			});
+		});
+
+		$("#idBtnReset").click(function () {
+			$(".input:eq(1), .input:eq(2), .input:eq(3), .input:eq(4)").val("");
+		})
+
+		function validateOne(strInput, strReg, strResult) {
+			var getInput = strInput;
+			if (getInput === "") {
+				layer.msg("输入不能为空");
+				return false;
+			}
+			var reg = strReg;
+			if (reg === "") {
+				return true;
+			}
+			var result = reg.test(getInput);
+			if (result === false) {
+				layer.msg(strResult);
+				return false;
+			}
+			return true;
+		}
+
+		function validateNickName() {
+			return validateOne($(".input:eq(1)").val(), "", "姓名不合法");
+		}
+		function validateUserPhone() {
+			return validateOne($(".input:eq(2)").val(), /(1[345789]\d{9})/, "手机号码不合法");
+		}
+		function validateCardId() {
+			return validateOne($(".input:eq(3)").val(), /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/, "身份证号码不合法");
+		}
+		function validatePassword() {
+			return validateOne($(".input:eq(4)").val(), /([a-zA-Z0-9]\w{5,})/, "密码不合法");
+		}
+		function validateAll() {
+			return validateNickName() && validateUserPhone() && validateCardId() && validatePassword();
+		}
+
+
+		$(".input:eq(1)").blur(function () {
+			return validateNickName();
+		});
+		$(".input:eq(2)").blur(function () {
+			return validateUserPhone();
+		});
+		$(".input:eq(3)").blur(function () {
+			return validateCardId();
+		});
+		$(".input:eq(4)").blur(function () {
+			return validatePassword();
+		});
+
+		$("#idBtnUpdate").click(function () {
+			if (validateAll() === false) {
+				return false;
+			}
+			var windowId = layer.load();								// 先显示忙碌状态
+			var temp = {
+				id: g_id,												// 封装用户信息的id信息
+				nickName: 	$(".input:eq(1)").val(),
+				userPhone: 	$(".input:eq(2)").val(),
+				cardId: 	$(".input:eq(3)").val(),
+				password: 	$(".input:eq(4)").val()
+			}
+			$.post("/user/update.do", temp, function (message) {		// post方式发起请求，请求数据包含temp的json格式数据，message为请求响应返回的信息数据
+				layer.close(windowId);									// 关闭忙碌状态
+				layer.msg(message.result, {time: 1000}, function () {	// 先显示message的result，延时1000ms，再进行数据处理
+					if (message.status === 0) {
+						$(".header:eq(1), .content:eq(1)").fadeOut();
+						$(".input:eq(0)").val("");
+						layer.msg("请继续查询修改或者退出");
+					} else {
+						layer.msg("修改失败，请重试或者退出");
+					}
+				})
+			});
+		});
+	});
+</script>
+</html>
